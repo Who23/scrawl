@@ -31,7 +31,7 @@ export const store = createStore<State>({
     logout(state) {
       state.token = ''
       localStorage.setItem('token', state.token)
-    }
+    },
   },
 })
 
