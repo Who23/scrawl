@@ -1,7 +1,6 @@
-import component from 'virtual:vite-icons/*'
 import { RouteRecordRaw } from 'vue-router'
-import Home from '~/pages/Home.vue'
-import Login from '~/pages/Login/Login.vue'
+import Home from '~/pages/index.vue'
+import Login from '~/pages/Login/index.vue'
 import { store } from '~/modules/store'
 
 const isNotLoggedIn = (to, from, next) => {
