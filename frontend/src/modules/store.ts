@@ -22,7 +22,6 @@ export const store = createStore<State>({
   mutations: {
     fromLocalStorage(state) {
       state.token = localStorage.getItem('token') || ''
-      console.log(state.token)
     },
     login(state) {
       state.token = 'hello'

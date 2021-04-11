@@ -12,7 +12,6 @@ const isNotLoggedIn = (to, from, next) => {
 }
 
 const isLoggedIn = (to, from, next) => {
-  console.log(store.state.token)
   if (store.getters.isLoggedIn) {
     next()
     return
