@@ -1,3 +1,5 @@
+import '@fontsource/inter/500.css'
+import '@fontsource/inter/900.css'
 import { ViteSSG } from 'vite-ssg'
 import App from '~/App.vue'
 import 'virtual:windi.css'
