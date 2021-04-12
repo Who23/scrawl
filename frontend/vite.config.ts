@@ -22,7 +22,7 @@ export default defineConfig({
       extensions: ['vue', 'md'],
 
       // allow auto import and register components used in markdown
-      customLoaderMatcher: (id) => id.endsWith('.md'),
+      customLoaderMatcher: id => id.endsWith('.md'),
 
       // auto import icons
       customComponentResolvers: [

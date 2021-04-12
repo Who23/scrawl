@@ -1,6 +1,6 @@
-import { UserModule } from '~/types'
 import { createStore, Store, useStore as useVuexStore } from 'vuex'
 import { InjectionKey } from 'vue'
+import { UserModule } from '~/types'
 
 // define your typings for the store state
 export interface State {
@@ -8,7 +8,7 @@ export interface State {
 }
 
 // define injection key
-export const key: InjectionKey<Store<State>> = Symbol()
+export const key: InjectionKey<Store<State>> = Symbol('vuex injection key for ts')
 
 export const store = createStore<State>({
   state() {
@@ -17,7 +17,7 @@ export const store = createStore<State>({
     }
   },
   getters: {
-    isLoggedIn: (state) => state.token !== '',
+    isLoggedIn: state => state.token !== '',
   },
   mutations: {
     fromLocalStorage(state) {

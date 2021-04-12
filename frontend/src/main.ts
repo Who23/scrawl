@@ -1,12 +1,12 @@
 import '@fontsource/inter/500.css'
 import '@fontsource/inter/900.css'
-import { ViteSSG } from 'vite-ssg'
-import App from '~/App.vue'
 import 'virtual:windi.css'
 import 'virtual:windi-devtools'
 import './styles/main.css'
+import { ViteSSG } from 'vite-ssg'
 import { appRoutes } from './routes'
 import { store } from '~/modules/store'
+import App from '~/App.vue'
 
 store.commit('fromLocalStorage')
 
@@ -18,7 +18,7 @@ export const createApp = ViteSSG(
   },
   (ctx) => {
     // install all modules under `modules/`
-    Object.values(import.meta.globEager('./modules/*.ts')).map((i) =>
+    Object.values(import.meta.globEager('./modules/*.ts')).map(i =>
       i.install?.(ctx),
     )
   },
