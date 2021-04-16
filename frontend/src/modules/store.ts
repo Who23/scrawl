@@ -4,7 +4,7 @@ import { UserModule } from '~/types'
 
 // define your typings for the store state
 export interface State {
-  token: string
+  loggedIn: boolean
 }
 
 // define injection key
@@ -13,28 +13,26 @@ export const key: InjectionKey<Store<State>> = Symbol('vuex injection key for ts
 export const store = createStore<State>({
   state() {
     return {
-      token: '',
+      loggedIn: false,
     }
   },
   getters: {
-    isLoggedIn: state => state.token !== '',
+    isLoggedIn: state => state.loggedIn,
   },
   mutations: {
-    fromLocalStorage(state) {
-      state.token = localStorage.getItem('token') || ''
-    },
-    login(state) {
-      state.token = 'hello'
-      localStorage.setItem('token', state.token)
-    },
-    logout(state) {
-      state.token = ''
-      localStorage.setItem('token', state.token)
+    rawUpdateSessionState(state, newLoggedIn) {
+      state.loggedIn = newLoggedIn
     },
   },
 })
 
 export const install: UserModule = ({ app, router, isClient }) => {
+  fetch('/api/logged_in')
+    .then(rawResponse => rawResponse.json())
+    .then((data) => {
+      store.commit('rawUpdateSessionState', data.response)
+    })
+
   app.use(store, key)
 }
 

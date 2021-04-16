@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# TODO: only store openID token in cookie rather than everything.
 
 import os
 import flask
@@ -23,27 +24,16 @@ def index(path):
       return flask.redirect('http://localhost:3333')
   return flask.render_template('index.html')
 
-@app.route('/')
-def index():
-  return '''<a href="/test">Do OAuth</a>
-  <a href="/revoke">Revoke Credentials</a>
-  <a href="/clear">Clear session</a>'''
+@app.route('/api/logged_in')
+def isLoggedIn():
+  logged_in = False
+  if 'credentials' in flask.session:
+    logged_in = True
+
+  return flask.jsonify({ 'response' : logged_in })
 
 
-@app.route('/test')
-def show_id_token():
-  if 'credentials' not in flask.session:
-    return flask.redirect('authorize')
-
-  credentials = google.oauth2.credentials.Credentials(
-      **flask.session['credentials'])
-
-  # TODO: put in db
-  flask.session['credentials'] = credentials_to_dict(credentials)
-  return flask.jsonify(credentials_to_dict(credentials))
-
-
-@app.route('/authorize')
+@app.route('/api/login')
 def authorize():
   # Start OAuth 2.0 Authorization Grant Flow
   flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
@@ -60,7 +50,7 @@ def authorize():
   return flask.redirect(authorization_url)
 
 
-@app.route('/oauth2callback')
+@app.route('/api/oauth2callback')
 def oauth2callback():
   # state from original /authorize call
   state = flask.session['state']
@@ -76,13 +66,14 @@ def oauth2callback():
   credentials = flow.credentials
   flask.session['credentials'] = credentials_to_dict(credentials)
 
-  return flask.redirect(flask.url_for('show_id_token'))
+  del flask.session['state']
 
+  return flask.redirect(flask.url_for('index'))
 
-@app.route('/revoke')
+@app.route('/api/logout')
 def revoke():
   if 'credentials' not in flask.session:
-    return ('You need to <a href="/authorize">authorize</a> before revoking')
+    return flask.redirect(flask.url_for('index'))
 
   credentials = google.oauth2.credentials.Credentials(
     **flask.session['credentials'])
@@ -94,18 +85,13 @@ def revoke():
   clear_credentials()
   status_code = getattr(revoke, 'status_code')
   if status_code == 200:
-    return('Credentials successfully revoked.' + index())
+    return flask.redirect(flask.url_for('index'))
   else:
-    return('An error occurred.' + index())
+    return { 'response': f"Revoke failed with status {status_code}"}, 500
 
-
-@app.route('/clear')
 def clear_credentials():
   if 'credentials' in flask.session:
     del flask.session['credentials']
-  return ('Credentials have been cleared.<br><br>' +
-          index())
-
 
 def credentials_to_dict(credentials):
   return {'token': credentials.token,

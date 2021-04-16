@@ -5,10 +5,7 @@ import 'virtual:windi-devtools'
 import './styles/main.css'
 import { ViteSSG } from 'vite-ssg'
 import { appRoutes } from './routes'
-import { store } from '~/modules/store'
 import App from '~/App.vue'
-
-store.commit('fromLocalStorage')
 
 // https://github.com/antfu/vite-ssg
 export const createApp = ViteSSG(

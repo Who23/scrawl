@@ -1,15 +1,6 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
 import Button from '~/components/Button.vue'
-import { useStore } from '~/modules/store'
-
-const store = useStore()
-const router = useRouter()
-
-function login() {
-  store.commit('login')
-  router.push('/')
-}
+import { login } from '~/logic/auth'
 </script>
 
 <template>

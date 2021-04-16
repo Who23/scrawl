@@ -1,20 +1,7 @@
 <script lang="ts" setup>
-import { useRouter } from 'vue-router'
 import Button from '~/components/Button.vue'
 import DarkMode from '~/components/DarkMode.vue'
-import { useStore } from '~/modules/store'
-
-const store = useStore()
-const router = useRouter()
-
-function logout() {
-  store.commit('logout')
-  router.push('/login')
-}
-
-function doFetch() {
-  fetch('/api/hello').then()
-}
+import { logout } from '~/logic/auth'
 </script>
 
 <template>
@@ -26,6 +13,5 @@ function doFetch() {
       signed in :)
     </h1>
     <Button class="mb-5" text="Sign out" @click="logout"></Button>
-    <Button text="Fetch" @click="doFetch"></Button>
   </div>
 </template>
