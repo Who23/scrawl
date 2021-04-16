@@ -11,6 +11,10 @@ function logout() {
   store.commit('logout')
   router.push('/login')
 }
+
+function doFetch() {
+  fetch('/api/hello').then()
+}
 </script>
 
 <template>
@@ -21,6 +25,7 @@ function logout() {
     <h1 class="font-size text-7xl pb-10">
       signed in :)
     </h1>
-    <Button text="Sign out" @click="logout"></Button>
+    <Button class="mb-5" text="Sign out" @click="logout"></Button>
+    <Button text="Fetch" @click="doFetch"></Button>
   </div>
 </template>

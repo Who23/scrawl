@@ -52,4 +52,13 @@ export default defineConfig({
     include: ['vue', 'vue-router', '@vueuse/core'],
     exclude: ['vue-demi'],
   },
+
+  server: {
+    proxy: {
+      '^/api/.*': {
+        target: 'http://localhost:8080/',
+        secure: false,
+      },
+    },
+  },
 })
