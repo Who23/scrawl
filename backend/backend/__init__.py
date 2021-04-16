@@ -12,9 +12,16 @@ CLIENT_SECRETS_FILE = "./secrets/client_secret.json" # oauth client id & client 
 SCOPES = ['openid']
 FLASK_SECRET_KEY_FILE = "./secrets/secret_key.txt" # flask session secret key
 
-app = flask.Flask(__name__)
+app = flask.Flask(__name__, template_folder="dist", static_folder="dist/assets/")
 app.secret_key = open(FLASK_SECRET_KEY_FILE, 'br').read()
 
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def index(path):
+  # redirect to dev vite server if we're running dev flask server
+  if app.debug:
+      return flask.redirect('http://localhost:3333')
+  return flask.render_template('index.html')
 
 @app.route('/')
 def index():
@@ -110,10 +117,8 @@ def credentials_to_dict(credentials):
           'scopes': credentials.scopes,
           'quota_project_id': credentials.quota_project_id}
 
-def run_dev():
-  os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+def run_dev(secure):
+  if not secure:
+    os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
   app.run('localhost', 8080, debug=True)
-
-def run_prod():
-  app.run('0.0.0.0', 8080)

@@ -1,8 +1,8 @@
 dev:
 	poetry run python3 backend/__main__.py dev
 
-prod:
-	poetry run python3 backend/__main__.py prod
+secure-dev:
+	poetry run python3 backend/__main__.py secure-dev
 
 init:
 	poetry install

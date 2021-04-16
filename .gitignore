@@ -9,4 +9,5 @@ frontend/node_modules
 .pnpm-debug.log
 
 backend/secrets/*
+backend/backend/dist
 __pycache__
